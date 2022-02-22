@@ -7,15 +7,26 @@ import { TodoItem } from './TodoItem';
 import { CreateTodoButton } from './CreateTodoButton';
 import { TodoSearch } from './TodoSearch';
 
-const defaultTodos = [
+const defaulTodos = [
   {text: "Jugar Clash Royal", completed: false},
-  {text: "Estudiar React", completed: true},
+  {text: "Estudiar React", completed: false},
   {text: "Estilizar mi Todo", completed: true},
   {text: "Estudiar Ingles", completed: true},
+  {text: "Estudiar Ingles2", completed: true},
 ];
 
 function App() {
-  const [todos, setTodos] = React.useState(defaultTodos);
+  const localStorageTodos = localStorage.getItem("TODOS_V1"); 
+  let parsedTodos;
+
+  //validar si el usuario esta entrando por primera vez o no
+  if (!localStorageTodos) {
+    localStorage.setItem('TODOS_V1', JSON.stringify(defaulTodos));
+   parsedTodos = defaulTodos;
+ } else {
+   parsedTodos = JSON.parse(localStorageTodos);
+ }
+  const [todos, setTodos] = React.useState(parsedTodos);
   const [searchValue, setSearchValue] = React.useState('');
 
   //Count todos completed
@@ -36,22 +47,25 @@ function App() {
       return todoText.includes(searchText);
     })
   }
+  const saveTodos = (newTodos) => {
+    const stringifiedTodos = JSON.stringify(newTodos);
+    localStorage.setItem('TODOS_V1', stringifiedTodos);
+    setTodos(newTodos);
+  };
 
-  //Seleccionar como completada una tarea
   const completeTodo = (text) => {
-    const todoIndex = todos.findIndex(todo => todo.text === text)
+    const todoIndex = todos.findIndex(todo => todo.text === text);
     const newTodos = [...todos];
     newTodos[todoIndex].completed = true;
-    setTodos(newTodos);
-  }
+    saveTodos(newTodos);
+  };
 
-  //Eliminar una tarea 
   const deleteTodo = (text) => {
-    const todoIndex = todos.findIndex(todo => todo.text === text)
+    const todoIndex = todos.findIndex(todo => todo.text === text);
     const newTodos = [...todos];
     newTodos.splice(todoIndex, 1);
-    setTodos(newTodos);
-  }
+    saveTodos(newTodos);
+  };
 
 
   return (
