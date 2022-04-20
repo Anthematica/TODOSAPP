@@ -8,3 +8,10 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
+// //Creando portales
+// ReactDOM.createPortal(
+//   <App />,
+//   document.getElementById('modal');
+
+// );
+

@@ -5,7 +5,7 @@ function CreateTodoButton (props) {
     return (
         <button 
             className="CreateTodoButton"
-            onClick={() => console.log("Hubo un click!")}
+            onClick={() => props.setOpenModal(true)}
         >
             +
         </button>

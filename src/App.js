@@ -1,19 +1,12 @@
 
 import React from 'react';
-// import './App.css';
 import { TodoCounter } from "./TodoCounter"
 import { TodoList } from './TodoList';
 import { TodoItem } from './TodoItem';
 import { CreateTodoButton } from './CreateTodoButton';
 import { TodoSearch } from './TodoSearch';
-
-const defaulTodos = [
-  {text: "Jugar Clash Royal", completed: false},
-  {text: "Estudiar React", completed: false},
-  {text: "Estilizar mi Todo", completed: true},
-  {text: "Estudiar Ingles", completed: true},
-  {text: "Estudiar Ingles2", completed: true},
-];
+import { Modal } from './Modal/index.js';
+import { TodoForm } from './TodoForm.js'
 
 function App() {
   const localStorageTodos = localStorage.getItem("TODOS_V1"); 
@@ -21,13 +14,22 @@ function App() {
 
   //validar si el usuario esta entrando por primera vez o no
   if (!localStorageTodos) {
-    localStorage.setItem('TODOS_V1', JSON.stringify(defaulTodos));
-   parsedTodos = defaulTodos;
- } else {
-   parsedTodos = JSON.parse(localStorageTodos);
- }
-  const [todos, setTodos] = React.useState(parsedTodos);
+    //Con JSON.stringiFy convertimos a string 
+    localStorage.setItem('TODOS_V1', JSON.stringify([]));
+    parsedTodos = [];
+} else {
+   //Con Json.parse lo pasamos de string a objeto
+    parsedTodos = JSON.parse(localStorageTodos);
+}
+
+ /* React.useState retorno un arreglo de dos elementos, donde en la posición 0 es el estado inicial, 
+  y en la posición 1 se ejecuta una función que cambia el estado de la variable */
+  const [todos, setTodos] = React.useState(parsedTodos); //Estos es un hook
   const [searchValue, setSearchValue] = React.useState('');
+
+  //Todo hook empieza con la palabra use
+
+  const [openModal, setOpenModal] = React.useState(false);
 
   //Count todos completed
   const completedTodos = todos.filter(todo => todo.completed == true).length;
@@ -35,6 +37,7 @@ function App() {
 
   //Filtering searching
   let searchedTodos = [];
+  
 
   if (!searchValue.length >= 1){
     searchedTodos = todos;
@@ -47,6 +50,8 @@ function App() {
       return todoText.includes(searchText);
     })
   }
+
+  //Puente entre delete y complete, para que se persistan los datos
   const saveTodos = (newTodos) => {
     const stringifiedTodos = JSON.stringify(newTodos);
     localStorage.setItem('TODOS_V1', stringifiedTodos);
@@ -57,6 +62,15 @@ function App() {
     const todoIndex = todos.findIndex(todo => todo.text === text);
     const newTodos = [...todos];
     newTodos[todoIndex].completed = true;
+    saveTodos(newTodos);
+  };
+
+  const addTodo = (text) => {
+    const newTodos = [...todos];
+    newTodos.push({
+      completed: false,
+      text,
+    });
     saveTodos(newTodos);
   };
 
@@ -92,7 +106,20 @@ function App() {
         ))}
       </TodoList>
 
-      <CreateTodoButton />
+      { openModal && (
+          <Modal>
+            <TodoForm 
+              setOpenModal = {setOpenModal}
+              addTodo = {(text) => addTodo(text)}
+            />
+          </Modal>
+      )}   
+    
+
+      <CreateTodoButton
+        setOpenModal = {setOpenModal}
+      />
+
     </React.Fragment>
   );
 }
