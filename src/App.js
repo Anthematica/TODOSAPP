@@ -8,27 +8,41 @@ import { TodoSearch } from './components/TodoSearch';
 import { Modal } from './Modal/index.js';
 import { TodoForm } from './components/TodoForm'
 
-function App() {
-  const localStorageTodos = localStorage.getItem("TODOS_V1"); 
+//Creando un customReactHook
+function useLocalStorage(itemName){
+  const localStorageTodos = localStorage.getItem(itemName); 
   let parsedTodos;
 
   //validar si el usuario esta entrando por primera vez o no
   if (!localStorageTodos) {
     //Con JSON.stringiFy convertimos a string 
-    localStorage.setItem('TODOS_V1', JSON.stringify([]));
+    localStorage.setItem(itemName, JSON.stringify([]));
     parsedTodos = [];
-} else {
+  } else {
    //Con Json.parse lo pasamos de string a objeto
     parsedTodos = JSON.parse(localStorageTodos);
+  }
+
+  const [todos, setTodos] = React.useState(parsedTodos);
+
+  //Puente entre delete y complete, para que se persistan los datos
+  const saveTodos = (newTodos) => {
+    const stringifiedTodos = JSON.stringify(newTodos);
+    localStorage.setItem(itemName, stringifiedTodos);
+    setTodos(newTodos);
+  };
+
+  return [
+    todos,
+    saveTodos
+  ];
 }
 
- /* React.useState retorno un arreglo de dos elementos, donde en la posición 0 es el estado inicial, 
-  y en la posición 1 se ejecuta una función que cambia el estado de la variable */
-  const [todos, setTodos] = React.useState(parsedTodos); //Estos es un hook
+
+function App() {
+  const [todos, saveTodos] = useLocalStorage('TODOS_V1');//Custom hook
+
   const [searchValue, setSearchValue] = React.useState('');
-
-  //Todo hook empieza con la palabra use
-
   const [openModal, setOpenModal] = React.useState(false);
 
   //Count todos completed
@@ -50,13 +64,6 @@ function App() {
       return todoText.includes(searchText);
     })
   }
-
-  //Puente entre delete y complete, para que se persistan los datos
-  const saveTodos = (newTodos) => {
-    const stringifiedTodos = JSON.stringify(newTodos);
-    localStorage.setItem('TODOS_V1', stringifiedTodos);
-    setTodos(newTodos);
-  };
 
   const completeTodo = (text) => {
     const todoIndex = todos.findIndex(todo => todo.text === text);
