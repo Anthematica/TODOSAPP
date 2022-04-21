@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { TodoCounter } from "./TodoCounter"
-import { TodoList } from './TodoList';
-import { TodoItem } from './TodoItem';
-import { CreateTodoButton } from './CreateTodoButton';
-import { TodoSearch } from './TodoSearch';
+import { TodoCounter } from "./components/TodoCounter"
+import { TodoList } from './components/TodoList';
+import { TodoItem } from './components/TodoItem';
+import { CreateTodoButton } from './components/CreateTodoButton';
+import { TodoSearch } from './components/TodoSearch';
 import { Modal } from './Modal/index.js';
-import { TodoForm } from './TodoForm.js'
+import { TodoForm } from './components/TodoForm'
 
 function App() {
   const localStorageTodos = localStorage.getItem("TODOS_V1"); 
