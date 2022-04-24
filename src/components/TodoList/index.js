@@ -1,12 +1,13 @@
 import React from "react";
 import './TodoList.css';
+import {TodoItem} from '../TodoItem';
 
-function TodoList (props) {
+function TodoList ({onDelete, onComplete, todos}) {
     return (
         <section>
-            <ul>
-                {props.children}
-            </ul>
+            {
+                todos.map((todo) => (<TodoItem key={todo.id} onDelete={onDelete} onComplete={onComplete} todo={todo}/>))
+            }
         </section>
     );
 }

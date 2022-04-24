@@ -15,6 +15,7 @@ function TodoForm (props) {
 
     const onSubmit = (event) => {
         event.preventDefault();
+
         props.addTodo(newTodoValue);
         props.setOpenModal(false);
     };
@@ -27,6 +28,7 @@ function TodoForm (props) {
                 value={newTodoValue}
                 onChange={onChange}
                 placeholder="Write a task to do"
+                name='name'
             />
             <div className="TodoForm-buttonContainer">
                 <button

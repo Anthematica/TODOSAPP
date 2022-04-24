@@ -1,19 +1,19 @@
 import React from 'react';
 import './TodoItem.css';
 
-function TodoItem (props) {
+function TodoItem ({onDelete, onComplete, todo}) {
     return (
-        <li className="TodoItem">
-        <span 
-            className={`Icon Icon-check ${props.completed && 'Icon-check--active'}`}
-            onClick={props.onComplete}
-        >
-            √
-        </span>
-        <p className={`TodoItem-p ${props.completed && 'TodoItem-p--complete'}`}>
-            {props.text}
+        <li className="TodoItem"> 
+        <input type="checkbox"
+            checked={todo.status}
+            onChange={(e) => {
+                onComplete(todo.id,  e.target.checked);
+            }}
+        />
+        <p className="TodoItem-p">
+            {todo.name}
         </p>
-        <span className="Icon Icon-delete" onClick={props.onDelete}>
+        <span className="Icon Icon-delete" onClick={() => onDelete(todo.id)}>
             
             X
         </span>
