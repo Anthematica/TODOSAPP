@@ -4,7 +4,6 @@ import ky from 'ky';
 import { TodoCounter } from "./components/TodoCounter"
 import { TodoList } from './components/TodoList';
 import { CreateTodoButton } from './components/CreateTodoButton';
-import { TodoSearch } from './components/TodoSearch';
 import { Modal } from './Modal/index.js';
 import { TodoForm } from './components/TodoForm'
 
@@ -72,7 +71,7 @@ function App() {
         total={totalTodos}
         completed={completedTodos}
       />
-      
+
       <TodoList 
         onDelete={deleteTodo} 
         onComplete={completeTodo} 
