@@ -10,7 +10,7 @@ function TodoItem ({onDelete, onComplete, todo}) {
                 onComplete(todo.id,  e.target.checked);
             }}
         />
-        <p className="TodoItem-p">
+        <p className={`TodoItem-p ${todo.status && 'TodoItem-p--complete'}`}>
             {todo.name}
         </p>
         <span className="Icon Icon-delete" onClick={() => onDelete(todo.id)}>

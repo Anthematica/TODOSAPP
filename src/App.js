@@ -8,9 +8,6 @@ import { TodoSearch } from './components/TodoSearch';
 import { Modal } from './Modal/index.js';
 import { TodoForm } from './components/TodoForm'
 
-
-
-
 function App() {
   const [todos, setTodos] = React.useState([]);
 
@@ -33,22 +30,7 @@ function App() {
   const completedTodos = todos.filter(todo => todo.status == true).length;
   const totalTodos = todos.length;
 
-  // //Filtering searching
-  // let searchedTodos = [];
-  
-
-  // if (!searchValue.length >= 1){
-  //   searchedTodos = todos;
-  // } else {
-  //   searchedTodos = todos.filter(todo => {
-  //     const todoText = todo.name.toLowerCase();
-  //     const searchText = searchValue.toLowerCase();
-
-  //     //Validar si el texto que estamos escribiendo esta incluido en los Todos
-  //     return todoText.includes(searchText);
-  //   })
-  // }
-
+  //Completed todo
   async function completeTodo(id,completed){
     const resp = await ky.patch(`http://localhost:8000/api/v1/todos/${id}`, {
       json: {
@@ -77,7 +59,7 @@ function App() {
     setTodos((todos)=> [...todos, resp.data]);
   };
 
-
+  //Delete todo
   async function deleteTodo(id) {
     await ky.delete(`http://localhost:8000/api/v1/todos/${id}`).json();
 
@@ -90,13 +72,12 @@ function App() {
         total={totalTodos}
         completed={completedTodos}
       />
-
-      {/* <TodoSearch
-        searchValue={searchValue}
-        setSearchValue= {setSearchValue}
-      />  */}
-
-      <TodoList onDelete={deleteTodo} onComplete={completeTodo} todos={todos} />
+      
+      <TodoList 
+        onDelete={deleteTodo} 
+        onComplete={completeTodo} 
+        todos={todos} 
+      />
 
       { openModal && (
           <Modal>
@@ -106,12 +87,10 @@ function App() {
             />
           </Modal>
       )}   
-    
 
       <CreateTodoButton
         setOpenModal = {setOpenModal}
       />
-
     </React.Fragment>
   );
 }
